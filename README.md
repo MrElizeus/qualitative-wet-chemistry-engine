@@ -18,6 +18,10 @@ The current milestone implements Group I left branch end-to-end and keeps the ar
   - Graph traversal with stable node IDs.
   - Typed transition triggers via `ReactionAction`.
   - Typed outcomes via `TransitionOutcome` and `ObservedSignal`.
+- **Cation Domain Catalog**
+  - Master ion catalog with oxidation-state-aware cations (`Ion`).
+  - Theoretical analytical grouping (`AnalyticalGroup` I-V).
+  - Classical separation criteria metadata in `CationCatalog` (for theory reference only).
 - **Workflow Modules**
   - `WorkflowDefinition` contract.
   - `GroupIWorkflowDefinition` as first module.
