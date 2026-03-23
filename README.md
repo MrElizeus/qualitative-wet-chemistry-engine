@@ -28,7 +28,7 @@ The current milestone implements Group I left branch end-to-end and keeps the ar
 ## Project Structure
 
 ```text
-acie-engine/src/main/java/io/github/mrelizeus/qwcie/
+qwcie-engine/src/main/java/io/github/mrelizeus/qwcie/
 ├── cli/
 ├── domain/
 ├── engine/
@@ -44,7 +44,7 @@ acie-engine/src/main/java/io/github/mrelizeus/qwcie/
 ## Run
 
 ```bash
-cd acie-engine
+cd qwcie-engine
 mvn test
 mvn exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.Main"
 ```
@@ -52,7 +52,7 @@ mvn exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.Main"
 ### Interactive step-by-step run (Group I)
 
 ```bash
-cd acie-engine
+cd qwcie-engine
 mvn exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.GroupIInteractiveCli"
 ```
 
