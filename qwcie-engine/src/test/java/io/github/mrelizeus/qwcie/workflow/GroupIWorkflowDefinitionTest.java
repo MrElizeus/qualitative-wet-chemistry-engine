@@ -39,6 +39,97 @@ class GroupIWorkflowDefinitionTest {
     }
 
     @Test
+    void exposesPostChlorideFiltrateCationsAfterFiltering() {
+        AnalysisEngine engine = createGroupIEngine();
+
+        engine.applyAction(ReactionAction.ADD_DILUTE_HCL_OR_NACL);
+        TransitionOutcome outcome = engine.applyAction(ReactionAction.FILTER_POST_CHLORIDE_FILTRATE);
+
+        assertTrue(outcome.transitioned());
+        assertEquals(GroupIWorkflowDefinition.POST_CHLORIDE_FILTRATE, outcome.currentNodeId());
+        assertTrue(outcome.signals().contains(ObservedSignal.POST_CHLORIDE_FILTRATE_CATIONS_REMAIN_IN_SOLUTION));
+    }
+
+    @Test
+    void appliesNaohH2o2HeatTreatmentAndOxidizesTinInFiltrate() {
+        AnalysisEngine engine = createGroupIEngine();
+
+        List<ReactionAction> sequence = List.of(
+            ReactionAction.ADD_DILUTE_HCL_OR_NACL,
+            ReactionAction.FILTER_POST_CHLORIDE_FILTRATE,
+            ReactionAction.ADD_EXCESS_NAOH_H2O2_WITH_HEAT
+        );
+
+        TransitionOutcome outcome = applySequence(engine, sequence);
+
+        assertTrue(outcome.transitioned());
+        assertEquals(GroupIWorkflowDefinition.POST_ALKALINE_OXIDATIVE_SPLIT_POINT, outcome.currentNodeId());
+        assertTrue(outcome.signals().contains(ObservedSignal.ALKALINE_OXIDATIVE_TREATMENT_APPLIED));
+        assertTrue(outcome.signals().contains(ObservedSignal.SN2_OXIDIZED_TO_SN4));
+        assertTrue(outcome.signals().contains(ObservedSignal.ALKALINE_SOLID_LIQUID_SPLIT_READY));
+    }
+
+    @Test
+    void separatesAlkalinePrecipitateBranchForDownstreamCationWork() {
+        AnalysisEngine engine = createGroupIEngine();
+
+        List<ReactionAction> sequence = List.of(
+            ReactionAction.ADD_DILUTE_HCL_OR_NACL,
+            ReactionAction.FILTER_POST_CHLORIDE_FILTRATE,
+            ReactionAction.ADD_EXCESS_NAOH_H2O2_WITH_HEAT,
+            ReactionAction.SELECT_ALKALINE_PRECIPITATE_BRANCH
+        );
+
+        TransitionOutcome outcome = applySequence(engine, sequence);
+
+        assertTrue(outcome.transitioned());
+        assertEquals(GroupIWorkflowDefinition.ALKALINE_PRECIPITATE_PHASE, outcome.currentNodeId());
+        assertTrue(outcome.signals().contains(ObservedSignal.ALKALINE_PRECIPITATE_ISOLATED));
+    }
+
+    @Test
+    void dissolvesAlkalinePrecipitateWithHclAndHeat() {
+        AnalysisEngine engine = createGroupIEngine();
+
+        List<ReactionAction> sequence = List.of(
+            ReactionAction.ADD_DILUTE_HCL_OR_NACL,
+            ReactionAction.FILTER_POST_CHLORIDE_FILTRATE,
+            ReactionAction.ADD_EXCESS_NAOH_H2O2_WITH_HEAT,
+            ReactionAction.SELECT_ALKALINE_PRECIPITATE_BRANCH,
+            ReactionAction.ADD_HCL_WITH_HEAT
+        );
+
+        TransitionOutcome outcome = applySequence(engine, sequence);
+
+        assertTrue(outcome.transitioned());
+        assertEquals(GroupIWorkflowDefinition.ACID_DISSOLVED_PRECIPITATE_PHASE, outcome.currentNodeId());
+        assertTrue(outcome.signals().contains(ObservedSignal.ALKALINE_PRECIPITATE_DISSOLVED_BY_HCL_HEAT));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Fe3+"));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Mn4+"));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Cu2+"));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Cd2+"));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Ni2+"));
+    }
+
+    @Test
+    void separatesAlkalineSolutionBranchAsSolutionFraction() {
+        AnalysisEngine engine = createGroupIEngine();
+
+        List<ReactionAction> sequence = List.of(
+            ReactionAction.ADD_DILUTE_HCL_OR_NACL,
+            ReactionAction.FILTER_POST_CHLORIDE_FILTRATE,
+            ReactionAction.ADD_EXCESS_NAOH_H2O2_WITH_HEAT,
+            ReactionAction.SELECT_ALKALINE_SOLUTION_BRANCH
+        );
+
+        TransitionOutcome outcome = applySequence(engine, sequence);
+
+        assertTrue(outcome.transitioned());
+        assertEquals(GroupIWorkflowDefinition.ALKALINE_SOLUTION_PHASE, outcome.currentNodeId());
+        assertTrue(outcome.signals().contains(ObservedSignal.ALKALINE_SOLUTION_ISOLATED));
+    }
+
+    @Test
     void confirmsSilverOnResidueBranch() {
         AnalysisEngine engine = createGroupIEngine();
 

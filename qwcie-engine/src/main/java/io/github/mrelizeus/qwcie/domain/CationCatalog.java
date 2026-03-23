@@ -54,14 +54,14 @@ public final class CationCatalog {
             Ion.AG_PLUS,
             AnalyticalGroup.GROUP_I,
             GROUP_I_CRITERION,
-            "Classical Group I chloride. Modeled in the current Group I workflow."
+            "Classical Group I chloride. Modeled in the chloride-first mainline workflow."
         );
         register(
             catalog,
             Ion.PB_2_PLUS,
             AnalyticalGroup.GROUP_I,
             GROUP_I_CRITERION,
-            "Mainly separates in Group I as PbCl2; a residual fraction can continue and appear in Group II logic."
+            "Mainly separates in Group I as PbCl2; a residual fraction can continue in downstream logic."
         );
         register(
             catalog,

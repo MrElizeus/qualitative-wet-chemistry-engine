@@ -8,10 +8,15 @@ import java.util.List;
 
 public class GroupIWorkflowDefinition implements WorkflowDefinition {
 
-    public static final String WORKFLOW_ID = "group1-left-branch";
+    public static final String WORKFLOW_ID = "chloride-first-mainline";
 
     public static final String MIXTURE_I_TO_III = "MIXTURE_I_TO_III";
     public static final String GROUP1_CHLORIDE_PRECIPITATE = "GROUP1_CHLORIDE_PRECIPITATE";
+    public static final String POST_CHLORIDE_FILTRATE = "POST_CHLORIDE_FILTRATE";
+    public static final String POST_ALKALINE_OXIDATIVE_SPLIT_POINT = "POST_ALKALINE_OXIDATIVE_SPLIT_POINT";
+    public static final String ALKALINE_PRECIPITATE_PHASE = "ALKALINE_PRECIPITATE_PHASE";
+    public static final String ACID_DISSOLVED_PRECIPITATE_PHASE = "ACID_DISSOLVED_PRECIPITATE_PHASE";
+    public static final String ALKALINE_SOLUTION_PHASE = "ALKALINE_SOLUTION_PHASE";
     public static final String POST_CONC_HCL_SPLIT = "POST_CONC_HCL_SPLIT";
     public static final String GROUP1_RESIDUE_PATH_AG_PB_HG = "GROUP1_RESIDUE_PATH_AG_PB_HG";
     public static final String GROUP1_DISSOLVED_PATH_SB_PB_COMPLEX = "GROUP1_DISSOLVED_PATH_SB_PB_COMPLEX";
@@ -26,7 +31,7 @@ public class GroupIWorkflowDefinition implements WorkflowDefinition {
         Node mixture = new Node(
             MIXTURE_I_TO_III,
             "Mixture of Group I to Group III cations",
-            List.of("Ag+", "Pb2+", "Hg2_2+", "Sb3+", "Cu2+", "Cd2+", "Fe3+", "Mn2+", "Ni2+", "Al3+", "Zn2+")
+            List.of("Ag+", "Pb2+", "Hg2_2+", "Sb3+", "Sn2+", "Cu2+", "Cd2+", "Fe3+", "Mn2+", "Ni2+", "Al3+", "Zn2+")
         );
 
         Node chloridePrecipitate = new Node(
@@ -39,6 +44,36 @@ public class GroupIWorkflowDefinition implements WorkflowDefinition {
             POST_CONC_HCL_SPLIT,
             "Post concentrated HCl split",
             List.of("AgCl(s)", "PbCl2(s)", "Hg2Cl2(s)", "Sb3+", "PbCl4^2-")
+        );
+
+        Node filtratePostChlorides = new Node(
+            POST_CHLORIDE_FILTRATE,
+            "Filtrate after chloride precipitation step",
+            List.of("Fe3+", "Mn2+", "Cu2+", "Cd2+", "Ni2+", "Sn2+", "Al3+", "Zn2+")
+        );
+
+        Node filtrateAfterAlkalineOxidativeTreatment = new Node(
+            POST_ALKALINE_OXIDATIVE_SPLIT_POINT,
+            "Post NaOH excess + H2O2 + heat split point",
+            List.of("Mixed solid and liquid phases after alkaline oxidative treatment")
+        );
+
+        Node alkalinePrecipitatePhase = new Node(
+            ALKALINE_PRECIPITATE_PHASE,
+            "Alkaline precipitate phase",
+            List.of("Fe(OH)3(s)", "MnO2(s)", "Cu(OH)2(s)", "Cd(OH)2(s)", "Ni(OH)2(s)")
+        );
+
+        Node alkalinePrecipitateDissolved = new Node(
+            ACID_DISSOLVED_PRECIPITATE_PHASE,
+            "Alkaline precipitate dissolved with HCl and heat",
+            List.of("Fe3+", "Mn4+", "Cu2+", "Cd2+", "Ni2+")
+        );
+
+        Node alkalineSolutionPhase = new Node(
+            ALKALINE_SOLUTION_PHASE,
+            "Alkaline solution phase",
+            List.of("SnO3^2-", "AlO2-", "ZnO2^2-")
         );
 
         Node residuePath = new Node(
@@ -85,10 +120,49 @@ public class GroupIWorkflowDefinition implements WorkflowDefinition {
         );
 
         chloridePrecipitate.addTransition(
+            ReactionAction.FILTER_POST_CHLORIDE_FILTRATE,
+            filtratePostChlorides,
+            List.of(ObservedSignal.POST_CHLORIDE_FILTRATE_CATIONS_REMAIN_IN_SOLUTION),
+            "After filtering the chloride precipitate, Fe3+, Mn2+, Cu2+, Cd2+, Ni2+, Sn2+, Al3+, and Zn2+ remain in solution."
+        );
+
+        chloridePrecipitate.addTransition(
             ReactionAction.ADD_CONCENTRATED_HCL,
             postConcentratedSplit,
             List.of(ObservedSignal.GROUP1_RESIDUE_READY, ObservedSignal.GROUP1_DISSOLVED_COMPLEXES_READY),
             "Concentrated HCl prepared residue and dissolved branches."
+        );
+
+        filtratePostChlorides.addTransition(
+            ReactionAction.ADD_EXCESS_NAOH_H2O2_WITH_HEAT,
+            filtrateAfterAlkalineOxidativeTreatment,
+            List.of(
+                ObservedSignal.ALKALINE_OXIDATIVE_TREATMENT_APPLIED,
+                ObservedSignal.SN2_OXIDIZED_TO_SN4,
+                ObservedSignal.ALKALINE_SOLID_LIQUID_SPLIT_READY
+            ),
+            "Excess NaOH + H2O2 with heat applied to filtrate; alkaline oxidative treatment performed and tin advanced to Sn4+."
+        );
+
+        filtrateAfterAlkalineOxidativeTreatment.addTransition(
+            ReactionAction.SELECT_ALKALINE_PRECIPITATE_BRANCH,
+            alkalinePrecipitatePhase,
+            List.of(ObservedSignal.ALKALINE_PRECIPITATE_ISOLATED),
+            "Precipitated fraction isolated for downstream cation separation."
+        );
+
+        filtrateAfterAlkalineOxidativeTreatment.addTransition(
+            ReactionAction.SELECT_ALKALINE_SOLUTION_BRANCH,
+            alkalineSolutionPhase,
+            List.of(ObservedSignal.ALKALINE_SOLUTION_ISOLATED),
+            "Solution fraction isolated (stannite/aluminate/zincate path)."
+        );
+
+        alkalinePrecipitatePhase.addTransition(
+            ReactionAction.ADD_HCL_WITH_HEAT,
+            alkalinePrecipitateDissolved,
+            List.of(ObservedSignal.ALKALINE_PRECIPITATE_DISSOLVED_BY_HCL_HEAT),
+            "HCl with heat dissolved the precipitated fraction to Fe3+, Mn4+, Cu2+, Cd2+, and Ni2+."
         );
 
         postConcentratedSplit.addTransition(

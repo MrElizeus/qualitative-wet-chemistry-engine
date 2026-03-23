@@ -10,7 +10,7 @@ QWCIE models analytical chemistry procedures as deterministic workflow transitio
 - Reaction actions represent reagent additions or branch selections.
 - Observed signals represent lab evidence (precipitates, colors, complexes).
 
-The current milestone implements Group I left branch end-to-end and keeps the architecture ready for Groups II–V and anion workflows.
+The current milestone implements a chloride-first mainline workflow and keeps the architecture ready for Groups II–V and anion workflows.
 
 ## Architecture
 
@@ -61,7 +61,7 @@ mvn exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.GroupIInteractiveC
 ## Example Output
 
 ```text
-Workflow: group1-left-branch
+Workflow: chloride-first-mainline
 Starting node: MIXTURE_I_TO_III
 Action: ADD_DILUTE_HCL_OR_NACL
 Transitioned: true
@@ -70,12 +70,17 @@ Observed signals: GROUP1_CHLORIDES_PRECIPITATED
 Message: Group I chlorides precipitated after dilute HCl/NaCl addition.
 ```
 
-## Current Milestone (Group I)
+## Current Milestone (Chloride-First Mainline)
 
 Implemented nodes:
 
 - `MIXTURE_I_TO_III`
 - `GROUP1_CHLORIDE_PRECIPITATE`
+- `POST_CHLORIDE_FILTRATE`
+- `POST_ALKALINE_OXIDATIVE_SPLIT_POINT`
+- `ALKALINE_PRECIPITATE_PHASE`
+- `ACID_DISSOLVED_PRECIPITATE_PHASE`
+- `ALKALINE_SOLUTION_PHASE`
 - `POST_CONC_HCL_SPLIT`
 - `GROUP1_RESIDUE_PATH_AG_PB_HG`
 - `GROUP1_DISSOLVED_PATH_SB_PB_COMPLEX`
