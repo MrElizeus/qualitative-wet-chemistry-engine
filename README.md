@@ -22,8 +22,6 @@ The current milestone implements Group I left branch end-to-end and keeps the ar
   - `WorkflowDefinition` contract.
   - `GroupIWorkflowDefinition` as first module.
   - `WorkflowRegistry` for multi-workflow expansion.
-- **Backward Compatibility**
-  - Legacy `Observation` wrappers remain available while new logic uses actions/signals.
 
 ## Project Structure
 

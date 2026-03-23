@@ -1,6 +1,5 @@
 package io.github.mrelizeus.qwcie.engine;
 
-import io.github.mrelizeus.qwcie.domain.Observation;
 import io.github.mrelizeus.qwcie.domain.ReactionAction;
 
 import java.util.List;
@@ -33,22 +32,6 @@ public class AnalysisEngine {
                 List.of(),
                 "No transition defined for action " + action + " from node " + currentNode.getId() + "."
             ));
-    }
-
-    /**
-     * Legacy wrapper preserved for backward compatibility with the previous simple graph API.
-     */
-    @Deprecated
-    public boolean applyObservation(Observation observation) {
-        Objects.requireNonNull(observation, "observation cannot be null");
-
-        Node next = currentNode.next(observation);
-        if (next == null) {
-            return false;
-        }
-
-        currentNode = next;
-        return true;
     }
 
     public Node getCurrentNode() {

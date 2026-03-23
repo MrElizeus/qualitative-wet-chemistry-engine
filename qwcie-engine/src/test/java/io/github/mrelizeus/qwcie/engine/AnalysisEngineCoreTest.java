@@ -1,6 +1,5 @@
 package io.github.mrelizeus.qwcie.engine;
 
-import io.github.mrelizeus.qwcie.domain.Observation;
 import io.github.mrelizeus.qwcie.domain.ReactionAction;
 import org.junit.jupiter.api.Test;
 
@@ -61,19 +60,5 @@ class AnalysisEngineCoreTest {
         AnalysisEngine engine = new AnalysisEngine(new Node("START", "Start"));
 
         assertThrows(NullPointerException.class, () -> engine.applyAction(null));
-    }
-
-    @Test
-    void legacyObservationWrapperStillWorks() {
-        Node start = new Node("Start");
-        Node next = new Node("Next");
-        start.addTransition(Observation.WHITE_PRECIPITATE, next);
-
-        AnalysisEngine engine = new AnalysisEngine(start);
-
-        boolean transitioned = engine.applyObservation(Observation.WHITE_PRECIPITATE);
-
-        assertTrue(transitioned);
-        assertEquals(next.getId(), engine.getCurrentNode().getId());
     }
 }
