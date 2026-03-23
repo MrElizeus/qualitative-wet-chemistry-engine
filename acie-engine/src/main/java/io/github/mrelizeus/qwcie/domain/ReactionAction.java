@@ -1,0 +1,12 @@
+package io.github.mrelizeus.qwcie.domain;
+
+public enum ReactionAction {
+    ADD_DILUTE_HCL_OR_NACL,
+    ADD_CONCENTRATED_HCL,
+    SELECT_RESIDUE_BRANCH,
+    SELECT_DISSOLVED_BRANCH,
+    ADD_EXCESS_NH4OH,
+    ADD_HNO3,
+    ADD_K2CRO4_WITH_ACETATE_BUFFER,
+    ADD_HCL_KNO2_RHODAMINE_B
+}

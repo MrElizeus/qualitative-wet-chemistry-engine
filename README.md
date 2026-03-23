@@ -1,41 +1,39 @@
 # Qualitative Wet Chemistry Inference Engine for Cations and Anions (QWCIE)
 
-Rule-based Java engine for classical wet qualitative analysis of cation/anion identification reactions using a decision graph/state machine.
+Rule-based Java backend for classical wet qualitative analysis of cation/anion identification workflows using a typed graph engine.
 
 ## Overview
 
-QWCIE models wet analytical chemistry workflows as graph transitions:
+QWCIE models analytical chemistry procedures as deterministic workflow transitions:
 
-- States -> analysis nodes
-- Observations -> experimental outcomes
-- Transitions -> next decision step
+- Nodes represent laboratory states.
+- Reaction actions represent reagent additions or branch selections.
+- Observed signals represent lab evidence (precipitates, colors, complexes).
 
-This engine is designed to:
+The current milestone implements Group I left branch end-to-end and keeps the architecture ready for Groups II–V and anion workflows.
 
-- Simulate qualitative analysis routes
-- Standardize wet-lab decision logic
-- Support interactive tools (CLI/Web/API)
-- Scale to multiple analytical methods
+## Architecture
 
-## Technical Approach
-
-- Decision Graph
-- State Machine
+- **Typed Hybrid Engine**
+  - Graph traversal with stable node IDs.
+  - Typed transition triggers via `ReactionAction`.
+  - Typed outcomes via `TransitionOutcome` and `ObservedSignal`.
+- **Workflow Modules**
+  - `WorkflowDefinition` contract.
+  - `GroupIWorkflowDefinition` as first module.
+  - `WorkflowRegistry` for multi-workflow expansion.
+- **Backward Compatibility**
+  - Legacy `Observation` wrappers remain available while new logic uses actions/signals.
 
 ## Project Structure
 
-```
+```text
 acie-engine/src/main/java/io/github/mrelizeus/qwcie/
 ├── cli/
 ├── domain/
-└── engine/
+├── engine/
+└── workflow/
 ```
-
-## Core Components
-
-- `domain`: `Observation`, `Ion`
-- `engine`: `Node`, `AnalysisEngine`
-- `cli`: `Main`
 
 ## Tech Stack
 
@@ -46,21 +44,50 @@ acie-engine/src/main/java/io/github/mrelizeus/qwcie/
 ## Run
 
 ```bash
-mvn compile
+cd acie-engine
+mvn test
 mvn exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.Main"
+```
+
+### Interactive step-by-step run (Group I)
+
+```bash
+cd acie-engine
+mvn exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.GroupIInteractiveCli"
 ```
 
 ## Example Output
 
 ```text
-Estado inicial: Inicio
-Ahora estas en: Grupo I precipitado
+Workflow: group1-left-branch
+Starting node: MIXTURE_I_TO_III
+Action: ADD_DILUTE_HCL_OR_NACL
+Transitioned: true
+Current node: GROUP1_CHLORIDE_PRECIPITATE
+Observed signals: GROUP1_CHLORIDES_PRECIPITATED
+Message: Group I chlorides precipitated after dilute HCl/NaCl addition.
 ```
+
+## Current Milestone (Group I)
+
+Implemented nodes:
+
+- `MIXTURE_I_TO_III`
+- `GROUP1_CHLORIDE_PRECIPITATE`
+- `POST_CONC_HCL_SPLIT`
+- `GROUP1_RESIDUE_PATH_AG_PB_HG`
+- `GROUP1_DISSOLVED_PATH_SB_PB_COMPLEX`
+- `HG_BLACK_RESIDUE_AND_AG_AMMINE`
+- `AG_CONFIRMED_WHITE_AGCL`
+- `PB_CONFIRMED_YELLOW_PBCRO4`
+- `SB_CONFIRMED_LILAC_COMPLEX`
 
 ## Roadmap
 
-- Phase 1: base structure and inference core
-- Phase 2: Group I, Group II and anion routes
-- Phase 3: external rule loading, API and frontend integration
+- Add Group II workflow module.
+- Add Groups III–V workflow modules.
+- Add anion workflow modules.
+- Externalize workflow rules (JSON/YAML) without engine rewrite.
+- Expose REST API for frontend and integrations.
 
 Author: Eliseo Huetagoyena
