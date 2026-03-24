@@ -1,40 +1,41 @@
 # Qualitative Wet Chemistry Inference Engine for Cations and Anions (QWCIE)
 
-Rule-based Java backend for classical wet qualitative analysis of cation/anion identification workflows using a typed graph engine.
+Rule-based Java backend for classical wet qualitative analysis of cation and anion identification workflows using a typed graph engine.
 
 ## Overview
 
-QWCIE models analytical chemistry procedures as deterministic workflow transitions:
+QWCIE models analytical chemistry procedures as deterministic workflow transitions.
 
+Key concepts:
 - Nodes represent laboratory states.
 - Reaction actions represent reagent additions or branch selections.
-- Observed signals represent lab evidence (precipitates, colors, complexes).
+- Observed signals represent laboratory evidence (precipitates, colors, complexes).
 
 The current milestone implements a chloride-first mainline workflow and keeps the architecture ready for Groups II–V and anion workflows.
 
 ## Architecture
 
-- **Typed Hybrid Engine**
-  - Graph traversal with stable node IDs.
-  - Typed transition triggers via `ReactionAction`.
-  - Typed outcomes via `TransitionOutcome` and `ObservedSignal`.
-- **Cation Domain Catalog**
-  - Master ion catalog with oxidation-state-aware cations (`Ion`).
-  - Theoretical analytical grouping (`AnalyticalGroup` I-V).
-  - Classical separation criteria metadata in `CationCatalog` (for theory reference only).
-- **Workflow Modules**
-  - `WorkflowDefinition` contract.
-  - `GroupIWorkflowDefinition` as first module.
-  - `WorkflowRegistry` for multi-workflow expansion.
+The project is now a multi-module Maven build:
+
+- `qwcie-domain`
+  - Protocol contracts (`ReactionAction`, `ObservedSignal`)
+  - Cation catalog and theoretical group metadata
+- `qwcie-engine-core`
+  - Generic state-machine runtime (`Node`, `NodeTransition`, `AnalysisEngine`, `TransitionOutcome`)
+- `qwcie-workflow`
+  - Workflow contracts and implementations (`WorkflowDefinition`, `WorkflowRegistry`, `GroupIWorkflowDefinition`)
+- `qwcie-cli`
+  - Command-line entry points for scripted and interactive runs
 
 ## Project Structure
 
 ```text
-qwcie-engine/src/main/java/io/github/mrelizeus/qwcie/
-├── cli/
-├── domain/
-├── engine/
-└── workflow/
+qwcie-engine/
+├── pom.xml
+├── qwcie-domain/
+├── qwcie-engine-core/
+├── qwcie-workflow/
+└── qwcie-cli/
 ```
 
 ## Tech Stack
@@ -47,15 +48,25 @@ qwcie-engine/src/main/java/io/github/mrelizeus/qwcie/
 
 ```bash
 cd qwcie-engine
-mvn test
-mvn exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.Main"
+mvn -q test
+```
+
+### Scripted CLI run
+
+```bash
+cd qwcie-engine
+mvn -q install -DskipTests
+cd qwcie-cli
+mvn -q exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.app.Main"
 ```
 
 ### Interactive step-by-step run (Group I)
 
 ```bash
 cd qwcie-engine
-mvn exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.GroupIInteractiveCli"
+mvn -q install -DskipTests
+cd qwcie-cli
+mvn -q exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.app.GroupIInteractiveCli"
 ```
 
 ## Example Output
@@ -76,7 +87,9 @@ Implemented nodes:
 
 - `MIXTURE_I_TO_III`
 - `GROUP1_CHLORIDE_PRECIPITATE`
+- `POST_CHLORIDE_SPLIT`
 - `POST_CHLORIDE_FILTRATE`
+- `POST_CHLORIDE_PRECIPITATE_RESIDUE`
 - `POST_ALKALINE_OXIDATIVE_SPLIT_POINT`
 - `ALKALINE_PRECIPITATE_PHASE`
 - `ACID_DISSOLVED_PRECIPITATE_PHASE`
@@ -84,8 +97,14 @@ Implemented nodes:
 - `POST_CONC_HCL_SPLIT`
 - `GROUP1_RESIDUE_PATH_AG_PB_HG`
 - `GROUP1_DISSOLVED_PATH_SB_PB_COMPLEX`
-- `HG_BLACK_RESIDUE_AND_AG_AMMINE`
+- `POST_K2CRO4_PB_SPLIT`
+- `SB_CANDIDATE_AFTER_PB_NEGATIVE`
+- `POST_NH4OH_HG_SPLIT`
+- `HG_CONFIRMED_BLACK_RESIDUE`
+- `AG_AMMINE_PATH`
+- `POST_HNO3_SILVER_SPLIT`
 - `AG_CONFIRMED_WHITE_AGCL`
+- `AG_NOT_CONFIRMED_AFTER_HNO3`
 - `PB_CONFIRMED_YELLOW_PBCRO4`
 - `SB_CONFIRMED_LILAC_COMPLEX`
 
