@@ -19,11 +19,13 @@ The project is now a multi-module Maven build:
 
 - `qwcie-domain`
   - Protocol contracts (`ReactionAction`, `ObservedSignal`)
+  - Typed chemical species model (`ChemicalSpecies`)
   - Cation catalog and theoretical group metadata
 - `qwcie-engine-core`
   - Generic state-machine runtime (`Node`, `NodeTransition`, `AnalysisEngine`, `TransitionOutcome`)
 - `qwcie-workflow`
   - Workflow contracts and implementations (`WorkflowDefinition`, `WorkflowRegistry`, `GroupIWorkflowDefinition`)
+  - Declarative workflow specs (`WorkflowNodeSpec`, `WorkflowTransitionSpec`, `WorkflowGraphFactory`)
 - `qwcie-cli`
   - Command-line entry points for scripted and interactive runs
 
@@ -48,7 +50,7 @@ qwcie-engine/
 
 ```bash
 cd qwcie-engine
-mvn -q test
+mvn -q verify
 ```
 
 ### Scripted CLI run
@@ -68,6 +70,12 @@ mvn -q install -DskipTests
 cd qwcie-cli
 mvn -q exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.app.GroupIInteractiveCli"
 ```
+
+## Quality Gates
+
+- Coverage: JaCoCo runs during `verify` and enforces a minimum line coverage ratio.
+- Static analysis: Checkstyle runs during `verify` and fails the build if style/safety rules are violated.
+- CI: GitHub Actions executes `mvn verify` for every push and pull request.
 
 ## Example Output
 

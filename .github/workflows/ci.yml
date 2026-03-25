@@ -1,0 +1,26 @@
+name: QWCIE CI
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  build-and-quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: qwcie-engine
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Verify (tests + coverage + static analysis)
+        run: mvn -B -ntp verify

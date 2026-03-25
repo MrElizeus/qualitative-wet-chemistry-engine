@@ -95,6 +95,7 @@ public class GroupIInteractiveCli {
             String species = currentNode
                 .getExpectedSpecies()
                 .stream()
+                .map(specie -> specie.notation())
                 .sorted()
                 .reduce((left, right) -> left + ", " + right)
                 .orElse("none");

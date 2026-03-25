@@ -1,5 +1,6 @@
 package io.github.mrelizeus.qwcie.workflow.groupi;
 
+import io.github.mrelizeus.qwcie.domain.chemistry.ChemicalSpecies;
 import io.github.mrelizeus.qwcie.domain.protocol.ObservedSignal;
 import io.github.mrelizeus.qwcie.domain.protocol.ReactionAction;
 import io.github.mrelizeus.qwcie.engine.core.AnalysisEngine;
@@ -122,11 +123,11 @@ class GroupIWorkflowDefinitionTest {
         assertTrue(outcome.transitioned());
         assertEquals(GroupIWorkflowDefinition.ACID_DISSOLVED_PRECIPITATE_PHASE, outcome.currentNodeId());
         assertTrue(outcome.signals().contains(ObservedSignal.ALKALINE_PRECIPITATE_DISSOLVED_BY_HCL_HEAT));
-        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Fe3+"));
-        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Mn4+"));
-        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Cu2+"));
-        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Cd2+"));
-        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains("Ni2+"));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains(ChemicalSpecies.FE_3_PLUS));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains(ChemicalSpecies.MN_4_PLUS));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains(ChemicalSpecies.CU_2_PLUS));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains(ChemicalSpecies.CD_2_PLUS));
+        assertTrue(engine.getCurrentNode().getExpectedSpecies().contains(ChemicalSpecies.NI_2_PLUS));
     }
 
     @Test

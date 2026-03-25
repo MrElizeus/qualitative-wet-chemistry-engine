@@ -1,5 +1,6 @@
 package io.github.mrelizeus.qwcie.engine.core;
 
+import io.github.mrelizeus.qwcie.domain.chemistry.ChemicalSpecies;
 import io.github.mrelizeus.qwcie.domain.protocol.ObservedSignal;
 import io.github.mrelizeus.qwcie.domain.protocol.ReactionAction;
 
@@ -15,7 +16,7 @@ public class Node {
 
     private final String id;
     private final String label;
-    private final Set<String> expectedSpecies;
+    private final Set<ChemicalSpecies> expectedSpecies;
 
     private final Map<ReactionAction, NodeTransition> actionTransitions = new EnumMap<>(ReactionAction.class);
 
@@ -23,7 +24,7 @@ public class Node {
         this(id, label, Set.of());
     }
 
-    public Node(String id, String label, Collection<String> expectedSpecies) {
+    public Node(String id, String label, Collection<ChemicalSpecies> expectedSpecies) {
         this.id = validateIdentifier(id, "node id");
         this.label = validateIdentifier(label, "node label");
         this.expectedSpecies = Set.copyOf(Objects.requireNonNull(expectedSpecies, "expected species cannot be null"));
@@ -60,7 +61,7 @@ public class Node {
         return label;
     }
 
-    public Set<String> getExpectedSpecies() {
+    public Set<ChemicalSpecies> getExpectedSpecies() {
         return expectedSpecies;
     }
 
