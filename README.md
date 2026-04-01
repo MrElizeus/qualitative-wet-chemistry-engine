@@ -24,7 +24,7 @@ The project is now a multi-module Maven build:
 - `qwcie-engine-core`
   - Generic state-machine runtime (`Node`, `NodeTransition`, `AnalysisEngine`, `TransitionOutcome`)
 - `qwcie-workflow`
-  - Workflow contracts and implementations (`WorkflowDefinition`, `WorkflowRegistry`, `GroupIWorkflowDefinition`)
+  - Workflow contracts and implementations (`WorkflowDefinition`, `WorkflowRegistry`, `ChlorideMainlineWorkflowDefinition`)
   - Declarative workflow specs (`WorkflowNodeSpec`, `WorkflowTransitionSpec`, `WorkflowGraphFactory`)
 - `qwcie-cli`
   - Command-line entry points for scripted and interactive runs
@@ -62,13 +62,13 @@ cd qwcie-cli
 mvn -q exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.app.Main"
 ```
 
-### Interactive step-by-step run (Group I)
+### Interactive step-by-step run (Chloride Mainline)
 
 ```bash
 cd qwcie-engine
 mvn -q install -DskipTests
 cd qwcie-cli
-mvn -q exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.app.GroupIInteractiveCli"
+mvn -q exec:java -Dexec.mainClass="io.github.mrelizeus.qwcie.cli.app.ChlorideMainlineInteractiveCli"
 ```
 
 ## Quality Gates
@@ -84,9 +84,9 @@ Workflow: chloride-first-mainline
 Starting node: MIXTURE_I_TO_III
 Action: ADD_DILUTE_HCL_OR_NACL
 Transitioned: true
-Current node: GROUP1_CHLORIDE_PRECIPITATE
-Observed signals: GROUP1_CHLORIDES_PRECIPITATED
-Message: Group I chlorides precipitated after dilute HCl/NaCl addition.
+Current node: CHLORIDE_PRECIPITATE_NODE
+Observed signals: CHLORIDE_PRECIPITATE_FORMED
+Message: Chloride precipitate formed after dilute HCl/NaCl addition.
 ```
 
 ## Current Milestone (Chloride-First Mainline)
@@ -94,17 +94,46 @@ Message: Group I chlorides precipitated after dilute HCl/NaCl addition.
 Implemented nodes:
 
 - `MIXTURE_I_TO_III`
-- `GROUP1_CHLORIDE_PRECIPITATE`
+- `CHLORIDE_PRECIPITATE_NODE`
 - `POST_CHLORIDE_SPLIT`
 - `POST_CHLORIDE_FILTRATE`
 - `POST_CHLORIDE_PRECIPITATE_RESIDUE`
 - `POST_ALKALINE_OXIDATIVE_SPLIT_POINT`
 - `ALKALINE_PRECIPITATE_PHASE`
 - `ACID_DISSOLVED_PRECIPITATE_PHASE`
+- `POST_AMMONIACAL_SPLIT_POINT`
+- `FE_MN_RESIDUE_PHASE`
+- `NI_CU_CD_AMMINE_PHASE`
+- `FE_MN_OXIDIZED_SOLUTION_PHASE`
+- `FE_CONFIRMATION_PATH`
+- `FE_PRUSSIAN_BLUE_CONFIRMED`
+- `FE_THIOCYANATE_BLOOD_RED_CONFIRMED`
+- `MN_CONFIRMATION_PATH`
+- `MN_PERMANGANATE_CONFIRMED`
+- `NI_CU_CD_ACIDIFIED_PHASE`
+- `NI_CONFIRMATION_PATH`
+- `NI_DMG_SCARLET_CONFIRMED`
+- `CU_CD_SEPARATION_PATH`
+- `CU_CD_FERROCYANIDE_STAGE`
+- `POST_CU_CD_HCL_SPLIT`
+- `CU_CONFIRMED_SOLID_FERROCYANIDE`
+- `CD_CANDIDATE_PATH`
+- `CD_WHITE_FERROCYANIDE_CONFIRMED`
 - `ALKALINE_SOLUTION_PHASE`
+- `POST_AMPHOTERIC_SPLIT_POINT`
+- `SN_AL_HYDROXIDE_PRECIPITATE_PHASE`
+- `ZN_AMMINE_PHASE`
+- `POST_SN_AL_HCL_SPLIT`
+- `SN_CHLORO_COMPLEX_PATH`
+- `SN2_REDUCED_PATH`
+- `SN_CONFIRMED_HG2CL2_WHITE`
+- `AL3_CONFIRMATION_PATH`
+- `AL_CONFIRMED_RED_AL_OH3`
+- `ZN_ACIDIFIED_PATH`
+- `ZN_CONFIRMED_WHITE_ZN2_FE_CN6`
 - `POST_CONC_HCL_SPLIT`
-- `GROUP1_RESIDUE_PATH_AG_PB_HG`
-- `GROUP1_DISSOLVED_PATH_SB_PB_COMPLEX`
+- `CHLORIDE_RESIDUE_PATH_AG_PB_HG`
+- `CHLORIDE_DISSOLVED_PATH_SB_PB_COMPLEX`
 - `POST_K2CRO4_PB_SPLIT`
 - `SB_CANDIDATE_AFTER_PB_NEGATIVE`
 - `POST_NH4OH_HG_SPLIT`

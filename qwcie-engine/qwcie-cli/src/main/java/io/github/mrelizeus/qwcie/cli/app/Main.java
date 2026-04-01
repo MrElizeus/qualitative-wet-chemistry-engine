@@ -4,7 +4,7 @@ import io.github.mrelizeus.qwcie.domain.protocol.ObservedSignal;
 import io.github.mrelizeus.qwcie.domain.protocol.ReactionAction;
 import io.github.mrelizeus.qwcie.engine.core.AnalysisEngine;
 import io.github.mrelizeus.qwcie.engine.core.TransitionOutcome;
-import io.github.mrelizeus.qwcie.workflow.groupi.GroupIWorkflowDefinition;
+import io.github.mrelizeus.qwcie.workflow.chloride.ChlorideMainlineWorkflowDefinition;
 import io.github.mrelizeus.qwcie.workflow.api.WorkflowDefinition;
 import io.github.mrelizeus.qwcie.workflow.api.WorkflowRegistry;
 
@@ -14,11 +14,11 @@ public class Main {
 
     public static void main(String[] args) {
         WorkflowRegistry registry = new WorkflowRegistry();
-        WorkflowDefinition groupI = registry.get(GroupIWorkflowDefinition.WORKFLOW_ID);
+        WorkflowDefinition mainline = registry.get(ChlorideMainlineWorkflowDefinition.WORKFLOW_ID);
 
-        AnalysisEngine engine = new AnalysisEngine(groupI.startNode());
+        AnalysisEngine engine = new AnalysisEngine(mainline.startNode());
 
-        System.out.println("Workflow: " + groupI.id());
+        System.out.println("Workflow: " + mainline.id());
         System.out.println("Starting node: " + engine.getCurrentNode().getId());
 
         List<ReactionAction> scenario = List.of(

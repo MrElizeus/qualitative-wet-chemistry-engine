@@ -1,6 +1,6 @@
 package io.github.mrelizeus.qwcie.workflow.api;
 
-import io.github.mrelizeus.qwcie.workflow.groupi.GroupIWorkflowDefinition;
+import io.github.mrelizeus.qwcie.workflow.chloride.ChlorideMainlineWorkflowDefinition;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,7 +13,7 @@ public class WorkflowRegistry {
     private final Map<String, WorkflowDefinition> workflows;
 
     public WorkflowRegistry() {
-        this(List.of(new GroupIWorkflowDefinition()));
+        this(List.of(new ChlorideMainlineWorkflowDefinition()));
     }
 
     public WorkflowRegistry(List<WorkflowDefinition> workflowDefinitions) {
